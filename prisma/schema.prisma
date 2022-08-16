@@ -12,8 +12,13 @@ datasource db {
 
 model AppInfo {
   id      Int      @id @default(autoincrement())
-  AppName String   @unique
+  appName String   @unique
   text    String
   regDt   DateTime @default(now())
   modDt   DateTime @updatedAt
 }
+
+// model User {
+//   id Int @id @default(autoincrement())
+//   name
+// }
