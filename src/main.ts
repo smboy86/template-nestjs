@@ -6,6 +6,12 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // 1) CORS config
+  app.enableCors({
+    origin: true,
+  });
+
+  // 2) Swagger config
   app.use(
     ['/docs', '/docs-json'],
     basicAuth({
@@ -25,6 +31,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
+  // Run server
   await app.listen(3003);
 }
 
