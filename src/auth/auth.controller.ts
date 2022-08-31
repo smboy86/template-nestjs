@@ -11,8 +11,7 @@ export class AuthController {
 
   @Post('/join')
   join(@Body() body: JoinReqDto) {
-    console.log('1111:: ', body);
-    return 'Created User ::: ' + body.email;
+    return this.authService.join(body);
   }
 
   @Post('/login')

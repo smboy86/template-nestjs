@@ -1,6 +1,10 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ValidateReqDto, ValidateResDto } from './dtos';
+import { JoinReqDto } from './dtos/join.req.dto';
+import { UserResDto } from './dtos/user.res.dto';
+import { ValidateReqDto } from './dtos/validate.req.dto';
+import { ValidateResDto } from './dtos/validate.res.dto';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
@@ -18,5 +22,30 @@ export class AuthService {
     // return { status: HttpStatus.OK, error: null, userId: decoded.id };
 
     return { status: HttpStatus.OK, error: null, userId: null };
+  }
+
+  async join(payload: JoinReqDto): Promise<UserResDto | never> {
+    const { email, password } = payload;
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (user) {
+      throw new HttpException('Conflict', HttpStatus.CONFLICT);
+    }
+
+    // 회원가입
+    const salt: string = bcrypt.genSaltSync(10);
+
+    const createUser: JoinReqDto = {
+      email: email,
+      password: bcrypt.hashSync(password, salt),
+    };
+
+    return this.prisma.user.create({
+      data: createUser,
+    });
   }
 }
