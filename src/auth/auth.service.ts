@@ -46,6 +46,12 @@ export class AuthService {
 
     return this.prisma.user.create({
       data: createUser,
+      select: {
+        id: true,
+        email: true,
+        regDt: true,
+        modDt: true,
+      },
     });
   }
 }
