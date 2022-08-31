@@ -1,3 +1,12 @@
+# prisma
+
+### scheme 정보 수정 후
+
+```
+$ npx prisma migrate dev
+>> 변경 내역 확인하고 y
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
