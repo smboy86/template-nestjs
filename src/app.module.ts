@@ -1,29 +1,23 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './auth/strategies/jwt.strategy';
 
 @Module({
   imports: [
     PrismaModule,
-    JwtModule.registerAsync({
-      useFactory: async () => {
-        return {
-          secret: process.env.JWT_SECRET,
-          signOptions: {
-            expiresIn: process.env.JWT_EXPIRES,
-          },
-        };
-      },
+    ConfigModule.forRoot({
+      isGlobal: true,
+      // envFilePath: [`./src/config/.env.${process.env.STAGE}`],
+      // cache: true,
     }),
     UserModule,
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [JwtStrategy, AppService],
+  providers: [AppService],
 })
 export class AppModule {}

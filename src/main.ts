@@ -1,10 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as basicAuth from 'express-basic-auth';
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
 
   // 1) CORS config
   app.enableCors({
@@ -12,12 +14,14 @@ async function bootstrap() {
   });
 
   // 2) Swagger config
+  const swaggerAdminId = configService.get('SWAGGER_USER');
+  const swaggerAdminPw = configService.get('SWAGGER_PASSWORD');
   app.use(
     ['/docs', '/docs-json'],
     basicAuth({
       challenge: true,
       users: {
-        [process.env.SWAGGER_USER]: process.env.SWAGGER_PASSWORD,
+        [swaggerAdminId]: swaggerAdminPw,
       },
     }),
   );
@@ -32,7 +36,9 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   // Run server
-  await app.listen(3003);
+  const serverPort = configService.get('PORT', '3003');
+  await app.listen(serverPort);
+  console.log(`:::: SERVER RUN ${serverPort} ::::`);
 }
 
 bootstrap();
