@@ -11,6 +11,16 @@ $ npm i
 ### 환경설정
 
 .env 파일 생성
+example)
+PORT="3003"
+
+DATABASE_URL="...."
+
+SWAGGER_USER="admin"
+SWAGGER_PASSWORD="admin1004"
+
+JWT_SECRET="secret_jwt_secret_jwt_secret_jwt"
+JWT_EXPIRES="30s"
 
 ### scheme 정보 수정 후
 
