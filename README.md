@@ -19,7 +19,7 @@ DATABASE_URL="...."
 SWAGGER_USER="admin"
 SWAGGER_PASSWORD="admin1004"
 
-JWT_SECRET="secret_jwt_secret_jwt_secret_jwt"
+JWT_ACCESS_SECRET="secret_JWT_ACCESS_SECRET_JWT_ACCESS_SECRET_jwt"
 JWT_EXPIRES="30s"
 
 ## 개발 방법
