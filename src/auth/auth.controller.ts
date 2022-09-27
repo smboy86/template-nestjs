@@ -16,7 +16,7 @@ export class AuthController {
 
   @Post('/login')
   login(@Body() body: LoginReqDto) {
-    return '로그인';
+    return this.authService.login(body);
   }
 
   validate(payload: ValidateReqDto): Promise<ValidateResDto> {
