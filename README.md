@@ -22,14 +22,21 @@ SWAGGER_PASSWORD="admin1004"
 JWT_SECRET="secret_jwt_secret_jwt_secret_jwt"
 JWT_EXPIRES="30s"
 
+## 개발 방법
+
+### 서버 실행
+
+$ npm run start:dev
+접속 http://localhost:3003
+
+### 프리즈마 스튜디오 실행 (db 간편 조작 및 조회)
+
+$ npx prisma studio
+접속 hottp://localhost:5555
+
 ### scheme 정보 수정 후
 
 ```
 $ npx prisma migrate dev
 >> 변경 내역 확인하고 y
 ```
-
-## 서버 실행
-
-$ npm run start:dev
-접속 http://localhost:3003
