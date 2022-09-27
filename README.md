@@ -24,17 +24,19 @@ JWT_EXPIRES="30s"
 
 ## 개발 방법
 
-### 서버 실행
+### 1) 서버 실행
 
 $ npm run start:dev
+
 접속 http://localhost:3003
 
-### 프리즈마 스튜디오 실행 (db 간편 조작 및 조회)
+### 2) 프리즈마 스튜디오 실행 (db 간편 조작 및 조회)
 
 $ npx prisma studio
+
 접속 hottp://localhost:5555
 
-### scheme 정보 수정 후
+### 3) scheme 정보 수정 후
 
 ```
 $ npx prisma migrate dev
