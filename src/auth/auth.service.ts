@@ -107,6 +107,24 @@ export class AuthService {
     return tokens;
   }
 
+  async logout(body: { userId: string }): Promise<boolean> {
+    // TODO - 유효성 검사
+    const userId = Number(body.userId);
+    await this.prisma.user.updateMany({
+      where: {
+        id: userId,
+        hashRefreshToken: {
+          not: null,
+        },
+      },
+      data: {
+        hashRefreshToken: null,
+      },
+    });
+
+    return true;
+  }
+
   /////// commons
   // 토큰 발행
   async getTokens(userId: number, email: string): Promise<JwtTokens> {

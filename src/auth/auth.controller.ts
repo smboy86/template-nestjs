@@ -1,9 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JoinReqDto } from './dtos/join.req.dto';
 import { LoginReqDto } from './dtos/login.req.dto';
 import { ValidateReqDto } from './dtos/validate.req.dto';
 import { ValidateResDto } from './dtos/validate.res.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -17,6 +18,12 @@ export class AuthController {
   @Post('/login')
   login(@Body() body: LoginReqDto) {
     return this.authService.login(body);
+  }
+
+  @Post('/logout')
+  @UseGuards(JwtAuthGuard)
+  logout(@Body() body) {
+    return this.authService.logout(body);
   }
 
   validate(payload: ValidateReqDto): Promise<ValidateResDto> {
