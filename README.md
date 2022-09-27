@@ -28,3 +28,8 @@ JWT_EXPIRES="30s"
 $ npx prisma migrate dev
 >> 변경 내역 확인하고 y
 ```
+
+## 서버 실행
+
+$ npm run start:dev
+접속 http://localhost:3003
