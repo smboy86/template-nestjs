@@ -3,6 +3,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as basicAuth from 'express-basic-auth';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
+import { winstonLoggerUtil } from './utils/winston.util';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,7 +14,10 @@ async function bootstrap() {
     origin: true,
   });
 
-  // 2) Swagger config
+  // 2) logger - winston
+  app.useLogger(winstonLoggerUtil);
+
+  // 3) Swagger config
   const swaggerAdminId = configService.get('SWAGGER_USER');
   const swaggerAdminPw = configService.get('SWAGGER_PASSWORD');
   app.use(
