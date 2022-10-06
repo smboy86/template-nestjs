@@ -6,7 +6,8 @@ import { Request } from 'express';
 export class JwtAuthGuard extends AuthGuard('jwt') implements IAuthGuard {
   // 어디서 호출 되나?? 아돈노~
   public handleRequest(err: unknown, user: any): any {
-    console.log('jwt-auth GUARD ::: handleRequest  ', err, user);
+    console.log('2) jwt-auth GUARD handleRequest user :::   ', err, user);
+    //err : null, user: false
     return user;
   }
 
@@ -14,7 +15,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') implements IAuthGuard {
     await super.canActivate(context);
 
     const { user }: Request = context.switchToHttp().getRequest();
-    console.log('jwt-auth GUARD user::: ', user);
+    console.log('3) jwt-auth GUARD canActivate user::: ', user);
+    // TODO - validation 토큰을 가지고 있는지 확인
+    // TODO - validation 토큰이 유효한지 확인
 
     return user ? true : false;
   }
