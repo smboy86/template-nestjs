@@ -51,6 +51,7 @@ $ npx prisma migrate dev
 5. 프리즈마 DB 클라이언트 구성
 6. .dotenv 구성
 7. DTO 기반 req, res 양식 구축
+8. vscode extension인 Thunder client를 통해 편리한 api 테스트
 
 ### API 목록
 
@@ -73,3 +74,4 @@ $ npx prisma migrate dev
 8. .env 에서 15m 을 10s로 수정 후 서버 재기동, jwt 토큰 만료되는 지 확인
 9. 로그인
 10. [1-2] 혹은 [5] private api 호출 후 결과 재 확인 (10초 후 테스트 했을때 403 만료 )
+11. 스웨거 문서 확인
