@@ -31,7 +31,7 @@ async function bootstrap() {
   );
 
   const config = new DocumentBuilder()
-    .setTitle('마이스웨거')
+    .setTitle(configService.get('APP_NAME'))
     .setDescription('스웨거 API 출동')
     .setVersion('0.1')
     .build();

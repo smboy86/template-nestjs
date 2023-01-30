@@ -15,6 +15,7 @@ import { JwtTokens } from './types/tokens.type';
 import { JwtPayload } from './types';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { LogoutReqDto } from './dtos/logout.req.dto';
 
 @Injectable()
 export class AuthService {
@@ -39,8 +40,9 @@ export class AuthService {
   }
 
   async join(payload: JoinReqDto): Promise<UserResDto | never> {
-    const { email, password } = payload;
-    console.log('join body ;:: ', email, password);
+    // TODO - 페이로드가 없으면 에러 발생 처리 multipart 방식으로 보내면 파라미터 못찾음
+    const { email, password, name } = payload;
+    console.log('join body ;:: ', email, password, name);
 
     // valid - 기 가입자인지 확인
     const user = await this.prisma.user.findUnique({
@@ -61,6 +63,7 @@ export class AuthService {
     const userObj: JoinReqDto = {
       email: email,
       password: hashPw,
+      name: name,
     };
 
     // 2) DB INSERT
@@ -107,10 +110,10 @@ export class AuthService {
     return tokens;
   }
 
-  async logout(body: { userId: string }): Promise<boolean> {
+  async logout(body: LogoutReqDto): Promise<boolean> {
     // TODO - 유효성 검사
     const userId = Number(body.userId);
-    await this.prisma.user.updateMany({
+    const resultCnt = await this.prisma.user.updateMany({
       where: {
         id: userId,
         hashRefreshToken: {
@@ -122,7 +125,7 @@ export class AuthService {
       },
     });
 
-    return true;
+    return resultCnt.count > 0;
   }
 
   /////// commons

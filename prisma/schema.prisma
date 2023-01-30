@@ -6,7 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  // provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -22,6 +23,7 @@ model User {
   id               Int      @id @default(autoincrement())
   email            String   @unique
   password         String
+  name             String   @default("")
   hashRefreshToken String?
   regDt            DateTime @default(now())
   modDt            DateTime @updatedAt

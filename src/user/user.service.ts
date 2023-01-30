@@ -9,11 +9,13 @@ export class UserService {
     return this.prisma.user.findMany();
   }
 
-  public findUserById(id: number) {
-    return this.prisma.user.findUnique({
+  async findUserById(id: number) {
+    const resultFind = await this.prisma.user.findUnique({
       where: {
         id: id,
       },
     });
+
+    return resultFind;
   }
 }
