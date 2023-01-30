@@ -22,12 +22,12 @@
     "method": "GET",
     "sortNum": 20000,
     "created": "2022-09-27T00:35:47.875Z",
-    "modified": "2023-01-30T15:41:14.731Z",
+    "modified": "2023-01-30T15:47:16.758Z",
     "headers": [],
     "params": [],
     "auth": {
       "type": "bearer",
-      "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoidGVzdDFAZGV2LmNvbSIsImlhdCI6MTY3NTA5MzI2NSwiZXhwIjoxNjc1MDk0MTY1fQ.-C0N6XqRyJHXHcSbyb44MiFbIiNH0EWWCRUDQCTPBh0"
+      "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjUsImVtYWlsIjoidGVzdDFAZGV2LmNvbSIsImlhdCI6MTY3NTA5MzYzMiwiZXhwIjoxNjc1MDkzNjM3fQ.8VAXAG7rVbD1MGSN5J-23G9nIj2gPPIAWb_Y2jLKPBo"
     },
     "tests": []
   },
