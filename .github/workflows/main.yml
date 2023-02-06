@@ -5,11 +5,16 @@ jobs:
     name: Test server ssh cmd
     runs-on: ubuntu-latest
     steps:
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@v0.1.7
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: whoami
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          # host: ${{ secrets.HOST }}
+          # username: ${{ secrets.USERNAME }}
+          # password: ${{ secrets.PASSWORD }}
+          # port: ${{ secrets.PORT }}
+          # script: whoami
+          host: devpoi.com
+          username: root
+          password: Andek1004$
+          port: 33335
+          script: whoami
