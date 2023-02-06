@@ -13,7 +13,7 @@ jobs:
           # password: ${{ secrets.PASSWORD }}
           # port: ${{ secrets.PORT }}
           # script: whoami
-          host: devpoi.com
+          host: devpoi.life
           username: root
           password: Andek1004$
           port: 33335
