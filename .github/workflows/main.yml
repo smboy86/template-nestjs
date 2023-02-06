@@ -16,3 +16,4 @@ jobs:
             cd /home/template-nestjs/
             git pull
             npm run build
+            pm2 reload api-server
