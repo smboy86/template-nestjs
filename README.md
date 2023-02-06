@@ -25,6 +25,8 @@ $ npm i
 
 $ npm run start:dev
 
+## 배포 방법
+
 접속 http://localhost:3003
 
 ### 2) 프리즈마 스튜디오 실행 (db 간편 조작 및 조회)
