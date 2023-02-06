@@ -6,7 +6,7 @@ export class AppService {
   constructor(private prisma: PrismaService) {}
 
   getHello(): string {
-    return `22Hello World!\n App Name : ${process.env.APP_NAME}\n Port : ${process.env.PORT}`;
+    return `Hello World!\n App Name : ${process.env.APP_NAME}\n Port : ${process.env.PORT}`;
   }
 
   getAppInfo() {
