@@ -25,8 +25,6 @@ $ npm i
 
 $ npm run start:dev
 
-## 배포 방법
-
 접속 http://localhost:3003
 
 ### 2) 프리즈마 스튜디오 실행 (db 간편 조작 및 조회)
@@ -41,6 +39,10 @@ $ npx prisma studio
 $ npx prisma migrate dev
 >> 변경 내역 확인하고 y
 ```
+
+### 4) 배포방법
+
+github action에 자동 CD 등록 push 하게 되면 자동으로 ssh 접속하여 빌드 커맨드 작동
 
 # 템플릿 기능 소개
 
