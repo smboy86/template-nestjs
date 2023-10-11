@@ -5,11 +5,17 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// 1-1) sql
 datasource db {
-  // provider = "mysql"
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = env("SQLITE_URL") // test user 이미 들어 있음
 }
+
+// 1-2) mysql
+// datasource db {
+//   provider = "mysql"
+//   url      = env("DATABASE_URL")
+// }
 
 model AppInfo {
   id      Int      @id @default(autoincrement())
