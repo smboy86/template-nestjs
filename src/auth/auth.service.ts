@@ -5,44 +5,69 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { JoinReqDto } from './dtos/join.req.dto';
 import { UserResDto } from './dtos/user.res.dto';
-import { ValidateReqDto } from './dtos/validate.req.dto';
-import { ValidateResDto } from './dtos/validate.res.dto';
 import * as bcrypt from 'bcryptjs';
 import { LoginReqDto } from './dtos/login.req.dto';
 import { JwtTokens } from './types/tokens.type';
 import { JwtPayload } from './types';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { LogoutReqDto } from './dtos/logout.req.dto';
+import { LogoutReqDto } from '../user/dtos/logout.req.dto';
+import { UserService } from 'src/user/user.service';
+import { JoinUserReqDto } from 'src/user/dtos/joinUser.req.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private config: ConfigService,
     private prisma: PrismaService,
+    private userService: UserService,
     private jwtService: JwtService,
   ) {}
 
-  //// ##### 공통
-  async validate({ token }: ValidateReqDto): Promise<ValidateResDto> {
-    // const decoded: Auth = await this.jwtService.verify(token);
-    // if (!decoded) {
-    //   return { status: HttpStatus.FORBIDDEN, error: ['Token is invalid'], userId: null };
-    // }
-    // const auth: Auth = await this.jwtService.validateUser(decoded);
-    // if (!auth) {
-    //   return { status: HttpStatus.CONFLICT, error: ['User not found'], userId: null };
-    // }
-    // return { status: HttpStatus.OK, error: null, userId: decoded.id };
+  //// 내부 호출 위주 함수
+  // 토큰 발행
+  async getTokens(userId: number, email: string): Promise<JwtTokens> {
+    const jwtPayload: JwtPayload = {
+      sub: userId,
+      email: email,
+    };
 
-    return { status: HttpStatus.OK, error: null, userId: null };
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(jwtPayload, {
+        secret: this.config.get<string>('JWT_ACCESS_SECRET'),
+        expiresIn: this.config.get<string>('JWT_ACCESS_EXPIRES'),
+      }),
+      this.jwtService.signAsync(jwtPayload, {
+        secret: this.config.get<string>('JWT_REFRESH_SECRET'),
+        expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES'),
+      }),
+    ]);
+
+    return {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    };
   }
 
-  //// 공통 #####
+  // 리프레시 토큰 업데이트
+  async updateRtHash(userId: number, refreshToken: string): Promise<void> {
+    const salt: string = bcrypt.genSaltSync(10);
+    const hashRefreshToken: string = bcrypt.hashSync(refreshToken, salt);
 
-  async join(payload: JoinReqDto): Promise<UserResDto | never> {
+    await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        hashRefreshToken: hashRefreshToken,
+      },
+    });
+  }
+
+  //////////////////////////////////
+
+  async join(payload: JoinUserReqDto): Promise<UserResDto | never> {
     // TODO - 페이로드가 없으면 에러 발생 처리 multipart 방식으로 보내면 파라미터 못찾음
     const { email, password, name } = payload;
     console.log('join body ;:: ', email, password, name);
@@ -63,7 +88,7 @@ export class AuthService {
     const hashPw: string = bcrypt.hashSync(password, salt);
 
     // 1) 해시 패스워드 생성
-    const userObj: JoinReqDto = {
+    const userObj: JoinUserReqDto = {
       email: email,
       password: hashPw,
       name: name,
@@ -131,43 +156,25 @@ export class AuthService {
     return resultCnt.count > 0 ? 'good-bye' : 'fail';
   }
 
-  /////// commons
-  // 토큰 발행
-  async getTokens(userId: number, email: string): Promise<JwtTokens> {
-    const jwtPayload: JwtPayload = {
-      sub: userId,
-      email: email,
-    };
+  async refreshTokens(userId: number, refreshToken: string) {
+    // 1) 유저 존재하는지 체크
+    const selectedUser = await this.userService.findUserById(userId);
+    if (!selectedUser || !selectedUser.hashRefreshToken)
+      throw new ForbiddenException('Access Denied');
 
-    const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(jwtPayload, {
-        secret: this.config.get<string>('JWT_ACCESS_SECRET'),
-        expiresIn: this.config.get<string>('JWT_ACCESS_EXPIRES'),
-      }),
-      this.jwtService.signAsync(jwtPayload, {
-        secret: this.config.get<string>('JWT_REFRESH_SECRET'),
-        expiresIn: this.config.get<string>('JWT_REFRESH_EXPIRES'),
-      }),
-    ]);
+    // 2) refresh token 정상인지 체크
+    const refreshTokenMatches = await bcrypt.compareSync(
+      refreshToken,
+      selectedUser.hashRefreshToken,
+    );
+    if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
 
-    return {
-      access_token: accessToken,
-      refresh_token: refreshToken,
-    };
-  }
+    // 3) 토큰 새로 발행
+    const tokens = await this.getTokens(userId, selectedUser.email);
 
-  // 리프레시 토큰 업데이트
-  async updateRtHash(userId: number, refreshToken: string): Promise<void> {
-    const salt: string = bcrypt.genSaltSync(10);
-    const hashRefreshToken: string = bcrypt.hashSync(refreshToken, salt);
+    // 4) 유저의 토큰 업데이트
+    await this.updateRtHash(selectedUser.id, tokens.refresh_token);
 
-    await this.prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        hashRefreshToken: hashRefreshToken,
-      },
-    });
+    return tokens;
   }
 }

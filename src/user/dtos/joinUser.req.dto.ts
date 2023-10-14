@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class JoinReqDto {
+export class JoinUserReqDto {
   @ApiProperty({
     required: true,
     description: '유저 이메일',
@@ -19,4 +19,10 @@ export class JoinReqDto {
     example: '나는나',
   })
   name: string;
+  @ApiProperty({
+    required: false,
+    description: '리프레쉬 토큰',
+    example: '',
+  })
+  refreshToken?: string;
 }

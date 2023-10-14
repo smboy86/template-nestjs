@@ -1,18 +1,11 @@
-import {
-  INestApplication,
-  Injectable,
-  OnModuleDestroy,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class PrismaService
-  extends PrismaClient
-  implements OnModuleInit, OnModuleDestroy
-{
+export class PrismaService extends PrismaClient implements OnModuleInit {
   constructor(config: ConfigService) {
+    console.log('1111  :: ', config.get<string>('DATABASE_URL'));
     const url = config.get<string>('DATABASE_URL');
 
     super({
@@ -23,28 +16,7 @@ export class PrismaService
       },
     });
   }
-
-  // TODO - 사용처 확인 요망
-  async onModuleDestroy() {
-    await this.$connect();
-  }
-
-  // TODO - 사용처 확인 요망
   async onModuleInit() {
-    await this.$disconnect();
-  }
-
-  // TODO - 사용처 확인 요망 (test 용도)
-  async cleanDatabase() {
-    if (process.env.NODE_ENV === 'production') return;
-
-    return Promise.all([this.user.deleteMany()]);
-  }
-
-  // TODO - 사용처 확인 요망
-  async enableShutdownHooks(app: INestApplication) {
-    this.$on('beforeExit', async () => {
-      await app.close();
-    });
+    await this.$connect();
   }
 }

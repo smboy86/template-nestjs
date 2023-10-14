@@ -11,17 +11,17 @@ type ValiedPayload = {
   exp: number;
 };
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt-at') {
   constructor(private readonly configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      ignoreExpiration: false,
       secretOrKey: configService.get('JWT_ACCESS_SECRET'),
+      ignoreExpiration: false, // false = 유효기간 사용
     });
   }
 
   async validate(payload: ValiedPayload): Promise<ValiedPayload> {
-    console.log('1) jwt.strategy validate  :::  ', payload);
+    console.log('1) jwt-at validate  :::  ', payload);
     // TODO :: 유저가 있는지 없는지 체크 해야함
     return payload;
   }
