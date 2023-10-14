@@ -25,6 +25,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  //// ##### 공통
   async validate({ token }: ValidateReqDto): Promise<ValidateResDto> {
     // const decoded: Auth = await this.jwtService.verify(token);
     // if (!decoded) {
@@ -38,6 +39,8 @@ export class AuthService {
 
     return { status: HttpStatus.OK, error: null, userId: null };
   }
+
+  //// 공통 #####
 
   async join(payload: JoinReqDto): Promise<UserResDto | never> {
     // TODO - 페이로드가 없으면 에러 발생 처리 multipart 방식으로 보내면 파라미터 못찾음
@@ -110,7 +113,7 @@ export class AuthService {
     return tokens;
   }
 
-  async logout(body: LogoutReqDto): Promise<boolean> {
+  async logout(body: LogoutReqDto): Promise<string> {
     // TODO - 유효성 검사
     const userId = Number(body.userId);
     const resultCnt = await this.prisma.user.updateMany({
@@ -125,7 +128,7 @@ export class AuthService {
       },
     });
 
-    return resultCnt.count > 0;
+    return resultCnt.count > 0 ? 'good-bye' : 'fail';
   }
 
   /////// commons
