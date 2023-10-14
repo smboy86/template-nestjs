@@ -40,6 +40,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
+  // 4) NestJS 나중에 추가된..?
+  app.enableShutdownHooks();
+
   // Run server
   const serverPort = configService.get('PORT', '3003');
   await app.listen(serverPort);
