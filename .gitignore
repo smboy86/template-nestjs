@@ -37,4 +37,4 @@ lerna-debug.log*
 ## add custom
 .env
 .vscode/
-/prisma/apiserver.db
+prisma/apiserver.db
