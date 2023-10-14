@@ -33,7 +33,8 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle(configService.get('APP_NAME'))
     .setDescription('스웨거 API 출동')
-    .setVersion('0.1')
+    .setVersion('1.0')
+    .setExternalDoc('Postman Collection', '/docs-json')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
