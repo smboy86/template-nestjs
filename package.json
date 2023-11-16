@@ -11,6 +11,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
+    "start:pm2": "pm2 start dist/src/main.js --name apiserver",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "start:prisma": "npx prisma studio",
